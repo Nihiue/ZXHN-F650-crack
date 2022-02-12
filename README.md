@@ -1,8 +1,9 @@
 # ZXHN-F650-crack
-获取中兴光猫ZXHN F650超级用户密码
+获取中兴光猫ZXHN F650/F450A 超级用户密码
 
 ## Info
 - Tested on ZXHN F650 V2.0.0P1T3
+- Tested on ZXHN F450A V2.0.0P1T1sh
 
 ## Usage
 - python3 main.py
